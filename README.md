@@ -30,7 +30,7 @@ Esta seção se dedica a expor o que aprendi e/ou conclui durante cada semana do
 
 ### Semana 1 (31/03/2025)
 
-- Em breve!
+- Nessa semana, criei meu repositório no GitHub para armazenar meus projetos desenvolvidos no Embarcatech, incluindo o final da primeira fase.
 
 ## Licença
 
