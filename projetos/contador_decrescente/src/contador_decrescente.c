@@ -6,6 +6,11 @@
 #include "hardware/i2c.h"
 #include "libraries/inc/ssd1306.h"
 
+// Definição dos pinos dos botões:
+const uint8_t BUTTON_A = 5;
+const uint8_t BUTTON_B = 6;
+
+uint8_t countB = 0;
 //----------------------------------------------------------------------------------
 //DISPLAY:
 
@@ -41,20 +46,38 @@ void organizeStrings(char *str1, char *str2, char *str3, uint8_t *ssd, struct re
   writeString(msg, ssd, frame_area); // Escreve a mensagem no display
 }
 
-
-
-
 void dispCountNum(int num, uint8_t *ssd, struct render_area frame_area){
   char str_resultado[17];
   sprintf(str_resultado, "       %d       ", num);
-  organizeStrings("    COUNT     ", str_resultado, "                ", ssd, frame_area);
+  organizeStrings("     COUNT    ", str_resultado, "                ", ssd, frame_area);
 }
 
 //----------------------------------------------------------------------------------
 
+void ButtonBHandler(){
+  static absolute_time_t deb_time_B = 0;
+  if(absolute_time_diff_us(deb_time_B, get_absolute_time()) > 300){
+    countB++;
+    deb_time_B = get_absolute_time();
+  }
+}
+
 int main()
 {
     stdio_init_all();
+
+    // Inicializa botão A com pull_up:
+    gpio_init(BUTTON_A);
+    gpio_set_dir(BUTTON_A, GPIO_IN);
+    gpio_pull_up(BUTTON_A);
+
+    // Inicializa botão B com pull_up:
+    gpio_init(BUTTON_B);
+    gpio_set_dir(BUTTON_B, GPIO_IN);
+    gpio_pull_up(BUTTON_B);
+    
+    gpio_set_irq_enabled_with_callback(BUTTON_B, 0x04, 1, &ButtonBHandler);
+
     i2cInitDisplay(I2C_SDA, I2C_SCL); // Inicialização do i2c e do display OLED
     // Preparar área de renderização para o display (ssd1306_width pixels por ssd1306_n_pages páginas)
     struct render_area frame_area = {
@@ -72,11 +95,11 @@ int main()
     uint8_t count_secs = 9;
 
     while (true) {
-        printf("%d", count_secs);
-        dispCountNum(count_secs, ssd, frame_area);
-        while(absolute_time_diff_us(actual_time, get_absolute_time()) < 1000000);
-        actual_time = get_absolute_time();
-        count_secs--;
-        if(count_secs == 255) count_secs = 9;
+      printf("%d",countB);
+      dispCountNum(count_secs, ssd, frame_area);
+      while(absolute_time_diff_us(actual_time, get_absolute_time()) < 1000000);
+      actual_time = get_absolute_time();
+      count_secs--;
+      if(count_secs == 255) count_secs = 9;
     }
 }
