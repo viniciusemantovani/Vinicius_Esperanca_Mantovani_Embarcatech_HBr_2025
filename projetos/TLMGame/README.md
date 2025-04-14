@@ -18,7 +18,7 @@ O Programa é composto por dois jogos:
 
 | Componente            | Conexão na BitDogLab      |
 |-----------------------|---------------------------|
-| BitDogLab (RP2040) | -                         |
+| BitDogLab (Pi Pico W - RP2040) | -                         |
 | Buzzers MLT-8530   | GPIOs 10 e 21 como saídas PWM |
 | Matriz WS2812B 5x5 | GPIO 7 com configuração PIO |
 | Display OLED I2C   | SDA: GPIO14 / SCL: GPIO15 |
