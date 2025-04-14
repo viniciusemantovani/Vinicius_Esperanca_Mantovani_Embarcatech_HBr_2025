@@ -34,7 +34,6 @@ O Programa é composto por dois jogos:
 3. Conecte sua BitDogLab via cabo USB e coloque a Pico no modo de boot (pressione o botão BOOTSEL e conecte o cabo);
 4. Copie o arquivo .uf2 gerado para a unidade de armazenamento que aparece (RPI-RP2);
 5. A Pico reiniciará automaticamente e começará a executar o código;
-6. O histograma será atualizado no display OLED e os eventos simulados aparecerão na matriz de LEDs.
 <br />
 Sugestão: Use a extensão da Raspberry Pi Pico no VScode para importar o programa como projeto Pico, usando o sdk 2.1.0.
 
