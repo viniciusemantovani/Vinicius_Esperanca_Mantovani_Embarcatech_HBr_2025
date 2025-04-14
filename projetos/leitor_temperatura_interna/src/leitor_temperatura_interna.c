@@ -4,12 +4,14 @@
 #include "hardware/i2c.h"
 #include "libraries/inc/ssd1306.h"
 
+#define ADC_TEMPERATURE_CHANNEL 4   // Canal ADC que corresponde ao sensor de temperatura interno
+
 // Definição dos pinos usados para o display:
 const uint8_t I2C_SDA = 14;
 const uint8_t I2C_SCL = 15;
 
-uint8_t ssd[ssd1306_buffer_length];
-struct render_area frame_area = {
+uint8_t ssd[ssd1306_buffer_length]; // Buffer do display.
+struct render_area frame_area = { // Area de renderização do display.
   start_column : 0,
   end_column : ssd1306_width - 1,
   start_page : 0,
@@ -45,10 +47,10 @@ void organizeStrings(char *str1, char *str2, char *str3, uint8_t *ssd, struct re
     writeString(msg, ssd, frame_area); // Escreve a mensagem no display
 }
 
-// Definições
-#define ADC_TEMPERATURE_CHANNEL 4   // Canal ADC que corresponde ao sensor de temperatura interno
-
-// Função para converter o valor lido do ADC para temperatura em graus Celsius
+/**
+ * @brief converte o valor lido do ADC para graus Celsius.
+ * @param adc_value valor lido pelo ADC
+ */
 float adc_to_temperature(uint16_t adc_value) {
     // Constantes fornecidas no datasheet do RP2040
     const float conversion_factor = 3.3f / (1 << 12);  // Conversão de 12 bits (0-4095) para 0-3.3V
@@ -57,11 +59,14 @@ float adc_to_temperature(uint16_t adc_value) {
     return temperature;
 }
 
+/**
+ * @brief Escreve os valores da temperatura em Celsius e Farenheit no display.
+ */
 void printTempDisplay(float temp){
     char str_tempC[17];
     char str_tempF[17];
-    sprintf(str_tempC, "      %.2f C      ", temp);
-    sprintf(str_tempF, "      %.2f F      ", 32+1.8*temp);
+    sprintf(str_tempC, "    %.2f C      ", temp);
+    sprintf(str_tempF, "    %.2f F      ", 32+1.8*temp);
     organizeStrings("  Temperatura:  ", str_tempC, str_tempF, ssd, frame_area);
 }
 
@@ -96,6 +101,7 @@ int main() {
         printf("Temperatura em Celsius: %.2f °C\n", temperature);
         printf("Temperatura em Fahrenheit: %.2f °F\n", 32+1.8*temperature); // Converte e imprime a temperatura em Fahrenheit
         
+        // Imprime a temperatura no display
         printTempDisplay(temperature);
 
         // Atraso de 1000 milissegundos (1 segundo) entre as leituras
