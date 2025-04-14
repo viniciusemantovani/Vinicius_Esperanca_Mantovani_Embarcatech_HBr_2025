@@ -39,6 +39,7 @@
     "files.associations": {
         "stdlib.h": "c",
         "i2c.h": "c",
-        "ssd1306.h": "c"
+        "ssd1306.h": "c",
+        "joystick.h": "c"
     }
 }

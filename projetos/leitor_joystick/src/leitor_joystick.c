@@ -8,8 +8,8 @@
 const uint8_t I2C_SDA = 14;
 const uint8_t I2C_SCL = 15;
 
-uint8_t ssd[ssd1306_buffer_length];
-struct render_area frame_area = {
+uint8_t ssd[ssd1306_buffer_length]; // Buffer do display.
+struct render_area frame_area = { // Área de renderização display.
   start_column : 0,
   end_column : ssd1306_width - 1,
   start_page : 0,
@@ -45,6 +45,11 @@ void organizeStrings(char *str1, char *str2, char *str3, uint8_t *ssd, struct re
     writeString(msg, ssd, frame_area); // Escreve a mensagem no display
 }
 
+/**
+ * @brief Escreve os valores de leitura do joystick no display.
+ * @param Valor lido pelo ADC no eixo x
+ * @param Valor lido pelo ADC no eixo y
+ */
 void writeValuesOnDisplay(uint16_t vrx_value, uint16_t vry_value){
     char str_vx[17];
     char str_vy[17];
@@ -58,7 +63,7 @@ void writeValuesOnDisplay(uint16_t vrx_value, uint16_t vry_value){
         sprintf(str_vy, "Eixo Y: 0%d", vry_value);
     }
 
-    organizeStrings("    JOYSTICK    ", str_vx, str_vy, ssd, frame_area);
+    organizeStrings("    JOYSTICK    ", str_vy, str_vx, ssd, frame_area);
 }
 
 int main()
