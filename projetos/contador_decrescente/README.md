@@ -1,6 +1,5 @@
 # Contador Decrescente
 
-<p align="justify">
 Este programa implementa um contador decrescente de 9 segundos, cujo tempo é apresentado no display OLED (de 9 a 0) acompanhado pelo número de cliques do usuário no botão B.
 <br />
 Neste programa, o botão A inicia uma contagem do 9, de modo que esse valor é decrescido subsequentemente até 0 (um em um segundo). Enquanto essa contagem ocorre, é contado também o número de pressionamentos do botão B
