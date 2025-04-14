@@ -67,28 +67,33 @@ void dispCountNum(int num, uint8_t *ssd, struct render_area frame_area){
 
 //----------------------------------------------------------------------------------
 
-void ButtonHandler(){
+void ButtonHandler(uint gpio, uint32_t event_mask){
   static absolute_time_t deb_time_B = 0;
   static absolute_time_t deb_time_A = 0;
 
-  if(!gpio_get(BUTTON_B)){
-    if(absolute_time_diff_us(deb_time_B, get_absolute_time()) > 2000){
+  if(gpio == BUTTON_B){
+
+    if(event_mask == GPIO_IRQ_EDGE_FALL && absolute_time_diff_us(deb_time_B, get_absolute_time()) > 30000){
       countB++;
-      deb_time_B = get_absolute_time();
       if(counting == 1){
         dispCountNum(count_secs, ssd, frame_area);
-      }
+      }      
+    } else if(event_mask = GPIO_IRQ_EDGE_RISE && absolute_time_diff_us(deb_time_B, get_absolute_time()) > 30000){
+      deb_time_B = get_absolute_time();
     }
 
-  } else if (!gpio_get(BUTTON_A)){
-    if(absolute_time_diff_us(deb_time_A, get_absolute_time()) > 9000){
+  }
+
+  else if (gpio == BUTTON_A){
+    if(event_mask == GPIO_IRQ_EDGE_FALL && absolute_time_diff_us(deb_time_A, get_absolute_time()) > 30000){
       count_secs = 9;
       countB = 0;
       counting = 1;
-      deb_time_B = get_absolute_time();
       actual_time = get_absolute_time();
-      dispCountNum(count_secs, ssd, frame_area);
-
+      clearDisplay(ssd, frame_area);
+      dispCountNum(count_secs, ssd, frame_area);  
+    } else if(event_mask == GPIO_IRQ_EDGE_RISE && absolute_time_diff_us(deb_time_A, get_absolute_time()) > 30000){
+      deb_time_A = get_absolute_time();
     }
   }
 
@@ -107,9 +112,9 @@ int main()
     gpio_init(BUTTON_B);
     gpio_set_dir(BUTTON_B, GPIO_IN);
     gpio_pull_up(BUTTON_B);
-    
-    gpio_set_irq_enabled_with_callback(BUTTON_B, 0x04, 1, &ButtonHandler);
-    gpio_set_irq_enabled_with_callback(BUTTON_A, 0x04, 1, &ButtonHandler);
+
+    gpio_set_irq_enabled_with_callback(BUTTON_B, GPIO_IRQ_EDGE_FALL|GPIO_IRQ_EDGE_RISE, 1, &ButtonHandler);
+    gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL|GPIO_IRQ_EDGE_RISE, 1, &ButtonHandler);
 
     i2cInitDisplay(I2C_SDA, I2C_SCL); // Inicialização do i2c e do display OLED
     // Preparar área de renderização para o display (ssd1306_width pixels por ssd1306_n_pages páginas)
