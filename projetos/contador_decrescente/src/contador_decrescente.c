@@ -10,18 +10,19 @@
 const uint8_t BUTTON_A = 5;
 const uint8_t BUTTON_B = 6;
 
-absolute_time_t actual_time = 0;
-uint8_t count_secs = 9;
-uint8_t countB = 0;
-uint8_t counting = 0; // 0 - não conta; 1 - contando.
+absolute_time_t actual_time = 0; // Indica o momento atual.
+uint8_t count_secs = 9; // Conta os segundos (registra o segundo atual).
+uint8_t countB = 0; // Conta o número de cliques no botão B durante uma contagem decrescente.
+uint8_t counting = 0; // 0 - não conta; 1 - contando. Indica se o botão A foi pressionado (1 enquanto o contador está correndo).
+
 //----------------------------------------------------------------------------------
 //DISPLAY:
 
-const uint8_t I2C_SDA = 14;
-const uint8_t I2C_SCL = 15;
+const uint8_t I2C_SDA = 14; // Pino conectado ao SDA do display.
+const uint8_t I2C_SCL = 15; // Pino conectado ao SCL do display.
 
-uint8_t ssd[ssd1306_buffer_length];
-struct render_area frame_area = {
+uint8_t ssd[ssd1306_buffer_length]; // Buffer do display.
+struct render_area frame_area = { // Área de renderização display.
   start_column : 0,
   end_column : ssd1306_width - 1,
   start_page : 0,
@@ -57,6 +58,11 @@ void organizeStrings(char *str1, char *str2, char *str3, uint8_t *ssd, struct re
   writeString(msg, ssd, frame_area); // Escreve a mensagem no display
 }
 
+/**
+* @brief Imprime os números da contagem decrescente e do contador de cliques no display.
+* @param ssd buffer do display
+* @param frame_area area do quadro
+*/
 void dispCountNum(int num, uint8_t *ssd, struct render_area frame_area){
   char str_resultado[17];
   char str_B_clicks[17];
@@ -67,32 +73,34 @@ void dispCountNum(int num, uint8_t *ssd, struct render_area frame_area){
 
 //----------------------------------------------------------------------------------
 
+/**
+ * @brief Handler de interrupções para os botões.
+ * @param gpio indica o número do gpio que gera a interrupção
+ * @param event_mask indica o número referente ao evento que gera a interrupção
+ */
 void ButtonHandler(uint gpio, uint32_t event_mask){
-  static absolute_time_t deb_time_B = 0;
-  static absolute_time_t deb_time_A = 0;
+  static absolute_time_t deb_time_B = 0; // Contador para debounce do botão B
+  static absolute_time_t deb_time_A = 0; // Contador para debounce do botão A
 
-  if(gpio == BUTTON_B){
+  if(gpio == BUTTON_B){ // Para o botão B, soma um ao contador caso esteja contando e atualiza o display.
 
-    if(event_mask == GPIO_IRQ_EDGE_FALL && absolute_time_diff_us(deb_time_B, get_absolute_time()) > 30000){
+    if(event_mask == GPIO_IRQ_EDGE_FALL && absolute_time_diff_us(deb_time_B, get_absolute_time()) > 800){
       countB++;
-      if(counting == 1){
-        dispCountNum(count_secs, ssd, frame_area);
-      }      
-    } else if(event_mask = GPIO_IRQ_EDGE_RISE && absolute_time_diff_us(deb_time_B, get_absolute_time()) > 30000){
+    } else if(event_mask = GPIO_IRQ_EDGE_RISE && absolute_time_diff_us(deb_time_B, get_absolute_time()) > 800){
       deb_time_B = get_absolute_time();
     }
 
   }
 
-  else if (gpio == BUTTON_A){
-    if(event_mask == GPIO_IRQ_EDGE_FALL && absolute_time_diff_us(deb_time_A, get_absolute_time()) > 30000){
+  else if (gpio == BUTTON_A){ // Para o botão A, atualiza o contador de segundos, reiniciando a contagem e atualizando o display para o início.
+    if(event_mask == GPIO_IRQ_EDGE_FALL && absolute_time_diff_us(deb_time_A, get_absolute_time()) > 800){
       count_secs = 9;
       countB = 0;
       counting = 1;
       actual_time = get_absolute_time();
       clearDisplay(ssd, frame_area);
-      dispCountNum(count_secs, ssd, frame_area);  
-    } else if(event_mask == GPIO_IRQ_EDGE_RISE && absolute_time_diff_us(deb_time_A, get_absolute_time()) > 30000){
+
+    } else if(event_mask == GPIO_IRQ_EDGE_RISE && absolute_time_diff_us(deb_time_A, get_absolute_time()) > 800){
       deb_time_A = get_absolute_time();
     }
   }
@@ -101,7 +109,7 @@ void ButtonHandler(uint gpio, uint32_t event_mask){
 
 int main()
 {
-    stdio_init_all();
+    stdio_init_all(); // Inicia
 
     // Inicializa botão A com pull_up:
     gpio_init(BUTTON_A);
@@ -113,28 +121,28 @@ int main()
     gpio_set_dir(BUTTON_B, GPIO_IN);
     gpio_pull_up(BUTTON_B);
 
+    // Preparando interrupções para os botões:
     gpio_set_irq_enabled_with_callback(BUTTON_B, GPIO_IRQ_EDGE_FALL|GPIO_IRQ_EDGE_RISE, 1, &ButtonHandler);
     gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL|GPIO_IRQ_EDGE_RISE, 1, &ButtonHandler);
 
-    i2cInitDisplay(I2C_SDA, I2C_SCL); // Inicialização do i2c e do display OLED
-    // Preparar área de renderização para o display (ssd1306_width pixels por ssd1306_n_pages páginas)
+    i2cInitDisplay(I2C_SDA, I2C_SCL); // Inicialização do i2c e do display OLED.
 
-    calculate_render_area_buffer_length(&frame_area);
-    // Limpa o display
+    calculate_render_area_buffer_length(&frame_area); // Calcula e define o valor do tamanho do buffer da instância de área de renderização.
     
-    clearDisplay(ssd, frame_area);
+    clearDisplay(ssd, frame_area); // Limpa o display.
 
-    dispCountNum(count_secs, ssd, frame_area);
+    dispCountNum(count_secs, ssd, frame_area); // Atualiza o display com contadores em 9 (tempo) e 0 (cliques).
 
     while (true) {
-      if(counting){
+      if(counting){ // Caso o botão A tenha sido pressionado e a contagem esta correndo.
         dispCountNum(count_secs, ssd, frame_area);
-        while(absolute_time_diff_us(actual_time, get_absolute_time()) < 1000000);
-        actual_time = get_absolute_time();
-        count_secs--;
-        if(count_secs == 0){
-          dispCountNum(count_secs, ssd, frame_area);
-          counting = 0;
+        if(absolute_time_diff_us(actual_time, get_absolute_time()) > 1000000){ // Atualiza o valor do contador de tempo no display quando um segundo se passou.
+          count_secs--;
+          actual_time = get_absolute_time();
+        } 
+        if(count_secs == 0){ // Caso a contagem chegue ao fim.
+          dispCountNum(count_secs, ssd, frame_area); // Atualiza o display.
+          counting = 0; // Zera a flag que indica se a contagem está ativa (não está mais).
         }
       }
     }
