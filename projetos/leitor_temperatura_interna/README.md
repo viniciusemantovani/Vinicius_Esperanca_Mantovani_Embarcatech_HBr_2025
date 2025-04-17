@@ -32,9 +32,16 @@ Sugestão: Use a extensão da Raspberry Pi Pico no VScode para importar o progra
 - `src/libraries/inc/ssd1306.h`: .h com definições de voids da biblioteca de comunicação i2c com display OLED (esta é incluida no código principal);
 - `src/libraries/inc/ssd1306_font.h`: Código principal do projeto;
 - `src/libraries/inc/ssd1306_i2c.h`: .h da biblioteca de comunicação i2c com display OLED com definições e estruturas;
+
+- `assets/temperatura_demo.jpeg`: Imagem da bitdog operando com leitor de temperatura interna;
+
 ---
 
 ## 🖼️ Imagens do Projeto
+
+### Sensor de temperatura operando:
+<img src="./assets/temperatura_demo.jpeg" width="400">
+
 ---
 
 ## 📜 Licença
