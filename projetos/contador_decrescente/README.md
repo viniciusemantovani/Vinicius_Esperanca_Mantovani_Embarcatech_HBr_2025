@@ -41,6 +41,15 @@ Sugestão: Use a extensão da Raspberry Pi Pico no VScode para importar o progra
 
 ## 🖼️ Imagens do Projeto
 
+### Contador em 9 segundos, antes do início:
+<img src="./assets/conter_demo3" width="400">
+
+### Contador em progresso:
+<img src="./assets/conter_demo2" width="400">
+
+### Contador em 0 segundos, após o fim:
+<img src="./assets/conter_demo1" width="400">
+
 ---
 
 ## 📜 Licença
