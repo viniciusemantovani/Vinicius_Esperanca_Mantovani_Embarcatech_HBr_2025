@@ -38,10 +38,14 @@ Sugestão: Use a extensão da Raspberry Pi Pico no VScode para importar o progra
 - `src/libraries/inc/ssd1306_font.h`: Código principal do projeto;
 - `src/libraries/inc/ssd1306_i2c.h`: .h da biblioteca de comunicação i2c com display OLED com definições e estruturas;
 
+- `assets/joystick_demo.jpeg`: Imagem da Bitdog operando com o programa;
+
 ---
 
 ## 🖼️ Imagens do Projeto
 
+### Leitor de Joystick:
+<img src="./assets/joystick_demo.jpeg" width="400">
 ---
 
 ## 📜 Licença
