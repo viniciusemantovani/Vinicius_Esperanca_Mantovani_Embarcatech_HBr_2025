@@ -37,6 +37,10 @@ Sugestão: Use a extensão da Raspberry Pi Pico no VScode para importar o progra
 - `src/libraries/inc/ssd1306_font.h`: Código principal do projeto;
 - `src/libraries/inc/ssd1306_i2c.h`: .h da biblioteca de comunicação i2c com display OLED com definições e estruturas;
 
+- `assets/counter_demo1.jpeg`: Imagem da bitlog operando com contador pós contagem;
+- `assets/counter_demo2.jpeg`: Imagem da bitlog operando com contador durante contagem;
+- `assets/counter_demo3.jpeg`: Imagem da bitlog operando com contador pré contagem;
+
 ---
 
 ## 🖼️ Imagens do Projeto
