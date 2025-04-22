@@ -13,8 +13,22 @@ typedef struct ball{
     uint8_t y;    
 } ball;
 
+//Estrutura das barras do histograma:
+typedef struct bars{
+    uint8_t xmin;
+    uint8_t xmax;
+} bars;
+
 //Pinos:
-const ball pins_position[10] = {{63, 7}, {60, 14}, {66, 14}, {56, 21}, {63, 21}, {70, 21}, {53, 28}, {60, 28}, {66, 28}, {73, 28}};
+const ball pins_position[28] = {
+                                {63, 4},
+                                {60, 8}, {66, 8},
+                                {57, 12}, {63, 12}, {69, 12},
+                                {54, 16}, {60, 16}, {66, 16}, {72, 16},
+                                {51, 20}, {57, 20}, {63, 20}, {69, 20}, {75, 20},
+                                {48, 24}, {54, 24}, {60, 24}, {66, 24}, {72, 24}, {78, 24},
+                                {45, 28}, {51, 28}, {57, 28}, {63, 28}, {69, 28}, {75, 28}, {81, 28}
+                               };
 
 /**
  * @brief Gera uma direção aleatória.
@@ -41,10 +55,10 @@ void startBall(ball *ballx){
  * @param ballx ponteiro para bola a ser verificada e modificada.
  */
 void handleColision(ball *ballx){
-    for(int i = 0; i < 10; i++){
-        if(ballx->y + 1 == pins_position[i].y && ballx->x == pins_position[i].x){
+    for(int i = 0; i < 28; i++){
+        if(ballx->y == pins_position[i].y && ballx->x == pins_position[i].x){
             bool direction = genRandDirection();
-            ballx->x = direction ? ballx->x + 1 : ballx->x - 1;
+            ballx->x = direction ? ballx->x + 3 : ballx->x - 3;
         }
     }
 }
@@ -72,9 +86,11 @@ int main()
 
     bool direction;
     ball bola;
+    startBall(&bola);
 
     while (true) {
-        sleep_ms(100);
-        
+        sleep_ms(1000);
+        updateBall(&bola);
+        printf("bola x: %u  y: %u\n", bola.x, bola.y);
     }
 }
