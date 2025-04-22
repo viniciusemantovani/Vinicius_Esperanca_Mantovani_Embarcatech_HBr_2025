@@ -7,6 +7,12 @@
 // #define I2C_SDA 14
 // #define I2C_SCL 15
 
+// Estrutura da bola:
+typedef struct ball{
+    uint8_t x;
+    uint8_t y;    
+} ball;
+
 /**
  * @brief Gera uma direção aleatória.
  * @return False - esquerda, True - direita.
@@ -19,6 +25,11 @@ bool genRandDirection(){
     } else{
         return true;
     }
+}
+
+void startBall(ball *ballx){
+    ballx->x = 63;
+    ballx->y = 31;
 }
 
 int main()
@@ -34,8 +45,9 @@ int main()
     // gpio_pull_up(I2C_SCL);
 
     bool direction;
+    ball bola;
+
     while (true) {
         sleep_ms(1000);
-
     }
 }
