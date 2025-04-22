@@ -13,22 +13,26 @@ typedef struct ball{
     uint8_t y;    
 } ball;
 
-//Estrutura das barras do histograma:
-typedef struct bars{
+//  Estrutura das barras do histograma:
+typedef struct bar{
     uint8_t xmin;
     uint8_t xmax;
-} bars;
+    uint8_t num_bolas;
+} bar;
 
-//Pinos:
+//  Pinos:
 const ball pins_position[28] = {
-                                {63, 4},
-                                {60, 8}, {66, 8},
-                                {57, 12}, {63, 12}, {69, 12},
-                                {54, 16}, {60, 16}, {66, 16}, {72, 16},
-                                {51, 20}, {57, 20}, {63, 20}, {69, 20}, {75, 20},
-                                {48, 24}, {54, 24}, {60, 24}, {66, 24}, {72, 24}, {78, 24},
-                                {45, 28}, {51, 28}, {57, 28}, {63, 28}, {69, 28}, {75, 28}, {81, 28}
+                                    {63, 4},
+                                    {60, 8}, {66, 8},
+                                    {57, 12}, {63, 12}, {69, 12},
+                                    {54, 16}, {60, 16}, {66, 16}, {72, 16},
+                                    {51, 20}, {57, 20}, {63, 20}, {69, 20}, {75, 20},
+                                    {48, 24}, {54, 24}, {60, 24}, {66, 24}, {72, 24}, {78, 24},
+                                    {45, 28}, {51, 28}, {57, 28}, {63, 28}, {69, 28}, {75, 28}, {81, 28}
                                };
+
+// Barras do histograma:
+bar bars[8] =  {{39, 45, 0}, {45, 51, 0}, {51, 57, 0}, {57, 63, 0}, {63, 69, 0}, {69, 75, 0}, {75, 81, 0}, {81, 87, 0}};
 
 /**
  * @brief Gera uma direção aleatória.
@@ -68,6 +72,16 @@ void handleColision(ball *ballx){
  * @param ballx ponteiro para a bola a ser modificada.
  */
 void updateBall(ball *ballx){
+    if(ballx->y >= 32){
+        for(int i = 0; i <= 8; i++){
+            if(ballx->x >= bars[i].xmin && ballx->x <= bars[i].xmax){
+                bars[i].num_bolas++;
+            }
+        }
+        ballx->x = 0;
+        ballx->y = 0;
+        return;
+    }
     ballx->y++;
     handleColision(ballx);
 }
