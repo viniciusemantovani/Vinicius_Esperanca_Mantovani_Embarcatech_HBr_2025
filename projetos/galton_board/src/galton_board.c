@@ -13,6 +13,9 @@ typedef struct ball{
     uint8_t y;    
 } ball;
 
+//Pinos:
+const ball pins_position[10] = {{63, 7}, {60, 14}, {66, 14}, {56, 21}, {63, 21}, {70, 21}, {53, 28}, {60, 28}, {66, 28}, {73, 28}};
+
 /**
  * @brief Gera uma direção aleatória.
  * @return False - esquerda, True - direita.
@@ -20,16 +23,39 @@ typedef struct ball{
 bool genRandDirection(){
     uint32_t rand_num = get_rand_32();
     uint32_t divide = 4294967295/2;
-    if(rand_num <= divide){
-        return false;
-    } else{
-        return true;
+    return !(rand_num <= divide);
+
+}
+
+/**
+ * @brief Posiciona uma bola na posição inicial, o centro no topo do display.
+ * @param ballx ponteiro para bola a ser modificada.
+ */
+void startBall(ball *ballx){
+    ballx->x = 63;
+    ballx->y = 0;
+}
+
+/**
+ * @brief Verifica se a bola colidiu com um pino e move horizontalmente caso sim.
+ * @param ballx ponteiro para bola a ser verificada e modificada.
+ */
+void handleColision(ball *ballx){
+    for(int i = 0; i < 10; i++){
+        if(ballx->y + 1 == pins_position[i].y && ballx->x == pins_position[i].x){
+            bool direction = genRandDirection();
+            ballx->x = direction ? ballx->x + 1 : ballx->x - 1;
+        }
     }
 }
 
-void startBall(ball *ballx){
-    ballx->x = 63;
-    ballx->y = 31;
+/**
+ * @brief Atualiza posição da bola.
+ * @param ballx ponteiro para a bola a ser modificada.
+ */
+void updateBall(ball *ballx){
+    ballx->y++;
+    handleColision(ballx);
 }
 
 int main()
@@ -48,6 +74,7 @@ int main()
     ball bola;
 
     while (true) {
-        sleep_ms(1000);
+        sleep_ms(100);
+        
     }
 }
