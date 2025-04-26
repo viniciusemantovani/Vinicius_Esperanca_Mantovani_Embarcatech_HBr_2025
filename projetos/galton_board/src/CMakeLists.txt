@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(galton_board galton_board.c )
+add_executable(galton_board galton_board.c ${CMAKE_CURRENT_LIST_DIR}/include/ssd1306.c)
 
 pico_set_program_name(galton_board "galton_board")
 pico_set_program_version(galton_board "0.1")

@@ -1,11 +1,14 @@
 #include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include "include/ssd1306.h"
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "pico/rand.h"
 
-// #define I2C_PORT i2c1
-// #define I2C_SDA 14
-// #define I2C_SCL 15
+#define I2C_PORT i2c1
+#define I2C_SDA 14
+#define I2C_SCL 15
 
 // Estrutura da bola:
 typedef struct ball{
@@ -67,6 +70,27 @@ void handleColision(ball *ballx){
     }
 }
 
+/**TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ * TESTAR
+ */
+
 /**
  * @brief Atualiza posição da bola.
  * @param ballx ponteiro para a bola a ser modificada.
@@ -74,8 +98,9 @@ void handleColision(ball *ballx){
 void updateBall(ball *ballx){
     if(ballx->y >= 32){
         for(int i = 0; i <= 8; i++){
-            if(ballx->x >= bars[i].xmin && ballx->x <= bars[i].xmax){
+            if(ballx->x > bars[i].xmin && ballx->x < bars[i].xmax){
                 bars[i].num_bolas++;
+                printf("caiu no %u, número bolas: %u  ", bars[i].xmin, bars[i].num_bolas);
             }
         }
         ballx->x = 0;
@@ -90,13 +115,26 @@ int main()
 {
     stdio_init_all();
 
-    // I2C Initialisation. Using it at 400Khz.
-    // i2c_init(I2C_PORT, 400*1000);
+    //-----------------------------------------------------------------
+    // Inicialização Display:
+
+    // I2C Initialisation. Using it at 1Mhz.
+    i2c_init(I2C_PORT, 1000*1000);
     
-    // gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
-    // gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);
-    // gpio_pull_up(I2C_SDA);
-    // gpio_pull_up(I2C_SCL);
+    gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
+    gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);
+    gpio_pull_up(I2C_SDA);
+    gpio_pull_up(I2C_SCL);
+
+    ssd1306_t disp;
+    disp.external_vcc=false;
+    ssd1306_init(&disp, 128, 64, 0x3C, i2c1);
+    ssd1306_clear(&disp);
+    ssd1306_draw_string(&disp, 8, 8, 1, "Teste!");
+    ssd1306_draw_string(&disp, 8, 16, 1, "Teste!");
+    ssd1306_show(&disp);
+
+    //-----------------------------------------------------------------
 
     bool direction;
     ball bola;
