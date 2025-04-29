@@ -34,7 +34,7 @@ Não é necessário material algum além de um computador.
 ## 🖼️ Imagens do Projeto
 
 ### Resposta do terminal ao programa de teste:
-<img src="./assets/placa_tlogicm.png" width="400">
+<img src="./assets/resposta_terminal.png" width="400">
 
 
 ---
