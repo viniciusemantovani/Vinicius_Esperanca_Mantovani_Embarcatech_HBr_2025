@@ -1,3 +1,0 @@
-/home/pininsu/Documents/embarcatech/Vinicius_Esperanca_Mantovani_embarcatech_HBr_2025/projetos/leitor_temperatura_teste/src/test/CMakeFiles/test_unity.dir
-/home/pininsu/Documents/embarcatech/Vinicius_Esperanca_Mantovani_embarcatech_HBr_2025/projetos/leitor_temperatura_teste/src/test/CMakeFiles/edit_cache.dir
-/home/pininsu/Documents/embarcatech/Vinicius_Esperanca_Mantovani_embarcatech_HBr_2025/projetos/leitor_temperatura_teste/src/test/CMakeFiles/rebuild_cache.dir
