@@ -24,7 +24,8 @@ Este repositório tem por objetivo armazenar e compartilhar os projetos desenvol
 | [Contador Decrescente](./projetos/contador_decrescente) | Contador decrescente de 9 segundos com contagem simultânea de cliques de B|
 | [Leitor de Joystick](./projetos/leitor_joystick) | Leitor de valores dos eixos do joystick com escrita no display|
 | [Leitor de temperatura interna](./projetos/leitor_temperatura_interna) | Leitor de valor de temperatura interna com escrita no display |
-
+| [Leitor de temperatura teste](./projetos/leitor_temperatura_teste) | Programa para teste de função de conversão de leitura ADC para Celsius |
+| [Leitor de temperatura interna](./projetos/pisca_led_w) | Pisca Led embutido da Pico W com programação modular |
 
 ---
 
@@ -38,11 +39,15 @@ Esta seção se dedica a expor o que aprendi e/ou conclui durante cada semana do
 
 ### Semana 2 (07/04/2025)
 
-- Nessa semana, visitamos o Instituto Hardware Br e a FEEC (Faculdade de Engenharia Elétrica e de Computação da Unicamp).
+- Visitamos o Instituto Hardware Br e a FEEC (Faculdade de Engenharia Elétrica e de Computação da Unicamp).
 
 ### Semana 3 (14/04/2025)
 
-- Nessa semana, criamos três projetos, um contador decrescente de 9 a 0 com contagem simultânea de cliques no botão B, um leitor do sensor interno de temperatura da Pi PICO W e um leitor de valores do joystick.
+- Na semana três, criamos três projetos, um contador decrescente de 9 a 0 com contagem simultânea de cliques no botão B, um leitor do sensor interno de temperatura da Pi PICO W e um leitor de valores do joystick.
+
+### Semana 4 (28/04/2025)
+
+- Agora, desenvolvi um projeto de pisca led da Pico W usando conceitos de programação modular e um programa para teste de uma função de conversão de leitura do ADC de temperatura interna para Celsius.
 
 ## Licença
 
