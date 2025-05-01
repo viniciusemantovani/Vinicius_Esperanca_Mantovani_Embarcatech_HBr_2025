@@ -10,7 +10,9 @@
 #define I2C_SDA 14
 #define I2C_SCL 15
 
-// Estrutura da bola:
+ssd1306_t disp; // Instância do display.
+
+// Estrutura da bola e dos pinos:
 typedef struct ball{
     uint8_t x;
     uint8_t y;    
@@ -23,25 +25,34 @@ typedef struct bar{
     uint8_t num_bolas;
 } bar;
 
-//  Pinos:
-const ball pins_position[28] = {
-                                    {63, 4},
-                                    {60, 8}, {66, 8},
-                                    {57, 12}, {63, 12}, {69, 12},
-                                    {54, 16}, {60, 16}, {66, 16}, {72, 16},
-                                    {51, 20}, {57, 20}, {63, 20}, {69, 20}, {75, 20},
-                                    {48, 24}, {54, 24}, {60, 24}, {66, 24}, {72, 24}, {78, 24},
-                                    {45, 28}, {51, 28}, {57, 28}, {63, 28}, {69, 28}, {75, 28}, {81, 28}
-                               };
+/**
+ * @brief Gera pinos e barras.
+ * @param pins vetor de pinos.
+ * @param bars vetor de barras do histograma.
+ */
+void gen_pins_position(ball *pins, bar *bars){
+    ball init_pos = {8,30}; // Centro em (9,31)
+    int count = 0;
+    for(int i = 0; i < 16; i++){
+        ball aux = init_pos;
+        for(int j = 0; j < i + 1; j++){
+            pins[count] = aux;
+            ssd1306_draw_square(&disp, pins[count].x, pins[count].y, 2, 2);
+            aux.y -= 4; // Começa a 2 de distância do centro do esquerdo.
+            count++;
+        }
+        init_pos.x = init_pos.x + 4; // Começa a 6 de distância do centro do superior.
+        init_pos.y = init_pos.y + 2; // Começa a 2 de distância do centro do superior à esquerda dele.
+    }
 
-// Barras do histograma:
-bar bars[8] =  {{39, 45, 0}, {45, 51, 0}, {51, 57, 0}, {57, 63, 0}, {63, 69, 0}, {69, 75, 0}, {75, 81, 0}, {81, 87, 0}};
+    ssd1306_show(&disp);
+}
 
 /**
  * @brief Gera uma direção aleatória.
  * @return False - esquerda, True - direita.
  */
-bool genRandDirection(){
+bool gen_rand_direction(){
     uint32_t rand_num = get_rand_32();
     uint32_t divide = 4294967295/2;
     return !(rand_num <= divide);
@@ -52,20 +63,22 @@ bool genRandDirection(){
  * @brief Posiciona uma bola na posição inicial, o centro no topo do display.
  * @param ballx ponteiro para bola a ser modificada.
  */
-void startBall(ball *ballx){
-    ballx->x = 63;
-    ballx->y = 0;
+void start_ball(ball *ballx){
+    ballx->x = 0;
+    ballx->y = 30; // Centro em 31
+    ssd1306_draw_square(&disp, ballx->x, ballx->y, 2, 2);
+    ssd1306_show(&disp);
 }
 
 /**
  * @brief Verifica se a bola colidiu com um pino e move horizontalmente caso sim.
  * @param ballx ponteiro para bola a ser verificada e modificada.
  */
-void handleColision(ball *ballx){
-    for(int i = 0; i < 28; i++){
-        if(ballx->y == pins_position[i].y && ballx->x == pins_position[i].x){
-            bool direction = genRandDirection();
-            ballx->x = direction ? ballx->x + 3 : ballx->x - 3;
+void handle_colision(ball *ballx, ball *pins){
+    for(int i = 0; i < 136; i++){
+        if(ballx->y <= pins[i].y+1 && ballx->y+1 >= pins[i].y && ballx->x+1 == pins[i].x){
+            bool direction = gen_rand_direction();
+            ballx->y = direction ? ballx->y - 2 : ballx->y + 2;
         }
     }
 }
@@ -95,24 +108,34 @@ void handleColision(ball *ballx){
  * @brief Atualiza posição da bola.
  * @param ballx ponteiro para a bola a ser modificada.
  */
-void updateBall(ball *ballx){
-    if(ballx->y >= 32){
-        for(int i = 0; i <= 8; i++){
-            if(ballx->x > bars[i].xmin && ballx->x < bars[i].xmax){
-                bars[i].num_bolas++;
-                printf("caiu no %u, número bolas: %u  ", bars[i].xmin, bars[i].num_bolas);
-            }
-        }
-        ballx->x = 0;
-        ballx->y = 0;
-        return;
-    }
-    ballx->y++;
-    handleColision(ballx);
+void update_ball(ball *ballx, ball *pins, bar *bars){
+    // if(ballx->x >= 63){
+    //     for(int i = 0; i <= 8; i++){
+    //         if(ballx->x > bars[i].xmin && ballx->x < bars[i].xmax){
+    //             bars[i].num_bolas++;
+    //             printf("caiu no %u, número bolas: %u  ", bars[i].xmin, bars[i].num_bolas);
+    //         }
+    //     }
+    //     ballx->x = 0;
+    //     ballx->y = 0;
+    //     return;
+    // }
+
+    ssd1306_clear_square(&disp, ballx->x, ballx->y, 2, 2);
+
+    ballx->x++;
+    handle_colision(ballx, pins);
+    ssd1306_draw_square(&disp, ballx->x, ballx->y, 2, 2);
+    ssd1306_show(&disp);
 }
 
 int main()
 {
+    //  Pinos:
+    ball pins_position[136]; // A última linha tem no máximo 16 pinos
+    // Barras do histograma:
+    bar bars[17]; // No máximo 17 barras.
+
     stdio_init_all();
 
     //-----------------------------------------------------------------
@@ -126,23 +149,26 @@ int main()
     gpio_pull_up(I2C_SDA);
     gpio_pull_up(I2C_SCL);
 
-    ssd1306_t disp;
     disp.external_vcc=false;
     ssd1306_init(&disp, 128, 64, 0x3C, i2c1);
     ssd1306_clear(&disp);
-    ssd1306_draw_string(&disp, 8, 8, 1, "Teste!");
-    ssd1306_draw_string(&disp, 8, 16, 1, "Teste!");
-    ssd1306_show(&disp);
+    // ssd1306_draw_string(&disp, 8, 8, 1, "Teste!");
+    // ssd1306_draw_string(&disp, 8, 16, 1, "Teste!");
+    // ssd1306_show(&disp); 
 
     //-----------------------------------------------------------------
 
     bool direction;
     ball bola;
-    startBall(&bola);
+    start_ball(&bola);
+    // sleep_ms(5000);
+    gen_pins_position(pins_position, bars);
+    // for(int i = 0; i < 136; i++){
+    //     printf("pos pin %d = (%d, %d)\n\n", i, pins_position[i].x, pins_position[i].y);
 
+    // }
     while (true) {
-        sleep_ms(1000);
-        updateBall(&bola);
-        printf("bola x: %u  y: %u\n", bola.x, bola.y);
+        update_ball(&bola, pins_position, bars);
+        // printf("bola x: %u  y: %u\n", bola.x, bola.y);
     }
 }
