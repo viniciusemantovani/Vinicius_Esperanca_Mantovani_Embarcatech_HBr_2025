@@ -10,7 +10,15 @@
 #define I2C_SDA 14
 #define I2C_SCL 15
 
-#define PIN_LINES 10
+// Definição dos pinos dos botões:
+#define BUTTON_A 5
+#define BUTTON_B 6
+
+#define PIN_LINES 12 // Número de linhas de pinos
+#define FREQ 60 // Frequência de atualização do display
+
+// Variávei que desequilibra a probabilidade:
+volatile int8_t left_right = 0;
 
 ssd1306_t disp; // Instância do display.
 
@@ -28,6 +36,35 @@ typedef struct bar{
 } bar;
 
 /**
+ * @brief Handler de interrupções para os botões.
+ * @param gpio indica o número do gpio que gera a interrupção
+ * @param event_mask indica o número referente ao evento que gera a interrupção
+ */
+void ButtonHandler(uint gpio, uint32_t event_mask){
+    static absolute_time_t deb_time_B = 0; // Contador para debounce do botão B
+    static absolute_time_t deb_time_A = 0; // Contador para debounce do botão A
+  
+    if(gpio == BUTTON_B){ // Para o botão B, soma um ao contador caso esteja contando e atualiza o display.
+  
+        if(event_mask == GPIO_IRQ_EDGE_FALL && absolute_time_diff_us(deb_time_B, get_absolute_time()) > 800){
+            if(left_right <= 2) left_right++;
+        } else if(event_mask = GPIO_IRQ_EDGE_RISE && absolute_time_diff_us(deb_time_B, get_absolute_time()) > 800){
+            deb_time_B = get_absolute_time();
+        }
+  
+    }
+  
+    else if (gpio == BUTTON_A){ // Para o botão A, atualiza o contador de segundos, reiniciando a contagem e atualizando o display para o início.
+        if(event_mask == GPIO_IRQ_EDGE_FALL && absolute_time_diff_us(deb_time_A, get_absolute_time()) > 800){
+            if(left_right >= -2) left_right--;
+        } else if(event_mask == GPIO_IRQ_EDGE_RISE && absolute_time_diff_us(deb_time_A, get_absolute_time()) > 800){
+            deb_time_A = get_absolute_time();
+        }
+    }
+  
+}
+
+/**
  * @brief Gera pinos e barras.
  * @param pins vetor de pinos.
  * @param bars vetor de barras do histograma.
@@ -42,12 +79,17 @@ void gen_pins_position(ball *pins, bar *bars){
             if(i == PIN_LINES-1){ // Última linha. ADD bars.
                 bars[j].ymax = aux.y + 4;
                 bars[j].ymin = aux.y + 1;
+                bars[j].num_bolas = 0;
+
                 if(j == PIN_LINES-1){
                     bars[j+1].ymax = aux.y;
                     bars[j+1].ymin = aux.y - 3;
+                    bars[j+1].num_bolas = 0;
+
                 }                
             }
             ssd1306_draw_square(&disp, pins[count].x, pins[count].y, 2, 2);
+
             aux.y -= 4; // Começa a 2 de distância do centro do esquerdo.
             count++;
         }
@@ -55,9 +97,6 @@ void gen_pins_position(ball *pins, bar *bars){
         init_pos.y = init_pos.y + 2; // Começa a 2 de distância do centro do superior à esquerda dele.
     }
 
-    for(int i= 0; i < PIN_LINES + 1; i++ ){
-        printf("bars %d = (%d <-> %d)", i, bars[i].ymin, bars[i].ymax);
-    }
     ssd1306_show(&disp);
 }
 
@@ -68,7 +107,7 @@ void gen_pins_position(ball *pins, bar *bars){
 bool gen_rand_direction(){
     uint32_t rand_num = get_rand_32();
     uint32_t divide = 4294967295/2;
-    return !(rand_num <= divide);
+    return !(rand_num <= divide + left_right*500000000);
 
 }
 
@@ -104,13 +143,12 @@ void update_ball(ball *ballx, ball *pins, bar *bars, int pins_total){
 
     // Histograma:
     if(ballx->x >= 63){
-        for(int i = 0; i <= PIN_LINES+1; i++){
+        for(int i = 0; i < PIN_LINES+1; i++){
             if(ballx->y > bars[i].ymin && ballx->y < bars[i].ymax){
                 bars[i].num_bolas++;
                 ssd1306_draw_square(&disp, 127 - bars[i].num_bolas, bars[i].ymin+1, 1, 2);
             }
         }
-
         ssd1306_clear_square(&disp, ballx->x, ballx->y, 2, 2); 
         ssd1306_show(&disp);
         ballx->x = 0;
@@ -128,6 +166,8 @@ void update_ball(ball *ballx, ball *pins, bar *bars, int pins_total){
 
 int main()
 {
+    stdio_init_all();
+
     int pins_total = 0;
     for(int i = 0; i < PIN_LINES; i++){
         pins_total += i + 1;
@@ -138,7 +178,22 @@ int main()
     // Barras do histograma:
     bar bars[PIN_LINES+1];
 
-    stdio_init_all();
+    //-----------------------------------------------------------------
+    // Inicialização Botões:
+
+    // Inicializa botão A com pull_up:
+    gpio_init(BUTTON_A);
+    gpio_set_dir(BUTTON_A, GPIO_IN);
+    gpio_pull_up(BUTTON_A);
+
+    // Inicializa botão B com pull_up:
+    gpio_init(BUTTON_B);
+    gpio_set_dir(BUTTON_B, GPIO_IN);
+    gpio_pull_up(BUTTON_B);
+
+    // Preparando interrupções para os botões:
+    gpio_set_irq_enabled_with_callback(BUTTON_B, GPIO_IRQ_EDGE_FALL|GPIO_IRQ_EDGE_RISE, 1, &ButtonHandler);
+    gpio_set_irq_enabled_with_callback(BUTTON_A, GPIO_IRQ_EDGE_FALL|GPIO_IRQ_EDGE_RISE, 1, &ButtonHandler);
 
     //-----------------------------------------------------------------
     // Inicialização Display:
@@ -163,14 +218,10 @@ int main()
     bool direction;
     ball bola;
     start_ball(&bola);
-    sleep_ms(5000);
-    gen_pins_position(pins_position, bars);
-    // for(int i = 0; i < 136; i++){
-    //     printf("pos pin %d = (%d, %d)\n\n", i, pins_position[i].x, pins_position[i].y);
 
-    // }
+    gen_pins_position(pins_position, bars); ///ERRADO PARA MAIS QUE 10
+
     while (true) {
         update_ball(&bola, pins_position, bars, pins_total);
-        // printf("bola x: %u  y: %u\n", bola.x, bola.y);
     }
 }
