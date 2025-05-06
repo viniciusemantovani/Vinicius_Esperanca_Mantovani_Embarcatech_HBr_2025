@@ -32,7 +32,7 @@ Sugestão: Use a extensão da Raspberry Pi Pico no VScode para importar o progra
 - `src/include/hal_led.h`: .h da camada de hal;
 - `src/include/led_embutido.h`: .h da camada de driver;
 
-- `assets/pico_led_blink.jpeg`: Diagrama de blocos de hardware;
+- `assets/pico_led_blink.jpeg`: Programa operante;
   
 ---
 
