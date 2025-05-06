@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include "include/ssd1306.h"
+#include "ssd1306.h"
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "pico/rand.h"
@@ -14,11 +14,14 @@
 #define BUTTON_A 5
 #define BUTTON_B 6
 
-#define PIN_LINES 12 // Número de linhas de pinos
+#define PIN_LINES 14 // Número de linhas de pinos
+#define TOTAL_PINS ((PIN_LINES*(1+PIN_LINES))/2) // Número total de pinos
 #define FREQ 60 // Frequência de atualização do display
 
-// Variávei que desequilibra a probabilidade:
+// Variável que desequilibra a probabilidade:
 volatile int8_t left_right = 0;
+
+volatile uint32_t count_balls = 0; // Armazena número total de bolas que já cairam;
 
 ssd1306_t disp; // Instância do display.
 
@@ -115,10 +118,13 @@ bool gen_rand_direction(){
  * @brief Posiciona uma bola na posição inicial, o centro no topo do display.
  * @param ballx ponteiro para bola a ser modificada.
  */
-void start_ball(ball *ballx){
-    ballx->x = 0;
-    ballx->y = 30; // Centro em 31
-    ssd1306_draw_square(&disp, ballx->x, ballx->y, 2, 2);
+void start_balls(ball *ballx){
+
+    for(int i = 0; i < 5; i++){
+        ballx[i].x = 0;
+        ballx[i].y = 30;
+    }
+    ssd1306_draw_square(&disp, ballx[0].x, ballx[0].y, 2, 2);
     ssd1306_show(&disp);
 }
 
@@ -126,8 +132,8 @@ void start_ball(ball *ballx){
  * @brief Verifica se a bola colidiu com um pino e move horizontalmente caso sim.
  * @param ballx ponteiro para bola a ser verificada e modificada.
  */
-void handle_colision(ball *ballx, ball *pins, int pins_total){
-    for(int i = 0; i < pins_total; i++){
+void handle_colision(ball *ballx, ball *pins){
+    for(int i = 0; i < TOTAL_PINS; i++){
         if(ballx->y <= pins[i].y+1 && ballx->y+1 >= pins[i].y && ballx->x+1 == pins[i].x){
             bool direction = gen_rand_direction();
             ballx->y = direction ? ballx->y - 2 : ballx->y + 2;
@@ -139,28 +145,62 @@ void handle_colision(ball *ballx, ball *pins, int pins_total){
  * @brief Atualiza posição da bola.
  * @param ballx ponteiro para a bola a ser modificada.
  */
-void update_ball(ball *ballx, ball *pins, bar *bars, int pins_total){
+void update_balls(ball *ballx, ball *pins, bar *bars){
 
-    // Histograma:
-    if(ballx->x >= 63){
+    bool bola_chegou = false; // true se a bola verificada por último chegou ao histograma;
+
+    for(int j = 0; j < 5; j++){ // Para cada bola;
+
+        // Histograma:
         for(int i = 0; i < PIN_LINES+1; i++){
-            if(ballx->y > bars[i].ymin && ballx->y < bars[i].ymax){
+            if(ballx[j].y > bars[i].ymin && ballx[j].y < bars[i].ymax && ballx[j].x >= 127 - bars[i].num_bolas){
                 bars[i].num_bolas++;
                 ssd1306_draw_square(&disp, 127 - bars[i].num_bolas, bars[i].ymin+1, 1, 2);
+                ssd1306_clear_square(&disp, ballx[j].x - 2, ballx[j].y, 2, 2); 
+                ballx[j].x = 0;
+                ballx[j].y = 30;
+                count_balls++;
+                bola_chegou = true;
+                if(bars[i].num_bolas >= 60){
+                    for(int k = 0; k < PIN_LINES+1; k++){
+
+                        // Apaga histograma:
+                        for(int p = 1; p <= bars[k].num_bolas; p++){
+                            ssd1306_clear_square(&disp, 127 - p, bars[k].ymin+1, 1, 2);
+                        }
+
+                        bars[k].num_bolas = bars[k].num_bolas/2; // Divide o número de retângulos no histograma em um fator de 2.
+
+                        // Desenha histograma reduzido:
+                        for(int p = 1; p <= bars[k].num_bolas; p++){
+                            ssd1306_draw_square(&disp, 127 - p, bars[k].ymin+1, 1, 2);
+                        }
+                    }
+                }
+                return;
             }
         }
-        ssd1306_clear_square(&disp, ballx->x, ballx->y, 2, 2); 
-        ssd1306_show(&disp);
-        ballx->x = 0;
-        ballx->y = 30;
-        return;
+
+        if(!bola_chegou){
+            bola_chegou = false;
+            ssd1306_clear_square(&disp, ballx[j].x, ballx[j].y, 2, 2);
+            ballx[j].x++;
+            handle_colision(&ballx[j], pins);
+            ssd1306_draw_square(&disp, ballx[j].x, ballx[j].y, 2, 2);            
+        }
+
     }
 
-    ssd1306_clear_square(&disp, ballx->x, ballx->y, 2, 2);
+}
 
-    ballx->x++;
-    handle_colision(ballx, pins, pins_total);
-    ssd1306_draw_square(&disp, ballx->x, ballx->y, 2, 2);
+/**
+ * @brief Desenha a String contendo o número de bolas no display.
+ */
+void draw_num_balls(){
+    char num_balls[10];
+    sprintf(num_balls, "%d", count_balls);
+    ssd1306_clear_square(&disp, 0, 0, 30, 7);
+    ssd1306_draw_string(&disp, 0, 0, 1, num_balls);
     ssd1306_show(&disp);
 }
 
@@ -168,13 +208,8 @@ int main()
 {
     stdio_init_all();
 
-    int pins_total = 0;
-    for(int i = 0; i < PIN_LINES; i++){
-        pins_total += i + 1;
-    }
-
     //  Pinos:
-    ball pins_position[pins_total];
+    ball pins_position[TOTAL_PINS];
     // Barras do histograma:
     bar bars[PIN_LINES+1];
 
@@ -216,12 +251,13 @@ int main()
     //-----------------------------------------------------------------
 
     bool direction;
-    ball bola;
-    start_ball(&bola);
+    ball bolas[5];
+    start_balls(bolas);
 
     gen_pins_position(pins_position, bars); ///ERRADO PARA MAIS QUE 10
 
     while (true) {
-        update_ball(&bola, pins_position, bars, pins_total);
+        update_balls(bolas, pins_position, bars);
+        draw_num_balls();
     }
 }
