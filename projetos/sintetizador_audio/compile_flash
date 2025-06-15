@@ -7,7 +7,7 @@ cmake ../CMakeLists.txt
 make
 
 # Encontra automaticamente o caminho de montagem da Raspberry Pi Pico (RPI-RP*)
-mount_point=$(find /media/pininsu -maxdepth 1 -type d -name "RPI-RP*" | head -n 1)
+mount_point=$(find <Path to rp pi pico folder> -maxdepth 1 -type d -name "RPI-RP*" | head -n 1)
 
 if [ -d "$mount_point" ]; then
     echo "Dispositivo encontrado em $mount_point"
