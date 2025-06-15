@@ -55,6 +55,7 @@ Sugestão: Use a extensão da Raspberry Pi Pico no VScode para importar o progra
 
 Método automatizado! SOMENTE NO LINUX!
 
+- Preencha o caminho para o folder da RP Pi Pico (em "mount_point=$(find <Path to rp pi pico folder> -maxdepth 1 -type d -name "RPI-RP*" | head -n 1)")
 - Execute o script compile_flash (./compile_flash)
 
 ---
