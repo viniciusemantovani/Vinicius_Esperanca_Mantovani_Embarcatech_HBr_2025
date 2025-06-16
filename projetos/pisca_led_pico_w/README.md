@@ -2,6 +2,7 @@
 
 Este programa implementa um pisca led na Raspberry Pi Pico W, em seu led embutido ligado ao módulo WiFi.
 A ideia neste projeto foi desenvolver o conhecimento e a habilidade de programação modular, conforme se pode notar pela organização dos arquivos.
+
 ---
 
 ##  Lista de materiais: 
