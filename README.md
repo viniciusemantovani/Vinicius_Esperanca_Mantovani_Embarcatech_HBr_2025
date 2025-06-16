@@ -6,7 +6,7 @@ Curso: Residência Tecnológica em Sistemas Embarcados
 
 Instituição: EmbarcaTech - HBr
 
-Campinas, março de 2025
+Campinas, 2025
 
 ---
 
