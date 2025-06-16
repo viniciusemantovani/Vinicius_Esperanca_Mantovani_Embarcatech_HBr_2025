@@ -88,10 +88,3 @@ Permitir que tarefas que deveriam ser executadas imediatamente no caso de sensor
 
 ## 📜 Licença
 GNU GPL-3.0.
-
-
-
----
-
-## 📜 Licença
-GNU GPL-3.0.
