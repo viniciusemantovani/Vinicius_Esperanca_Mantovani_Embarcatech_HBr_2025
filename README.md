@@ -25,7 +25,10 @@ Este repositório tem por objetivo armazenar e compartilhar os projetos desenvol
 | [Leitor de Joystick](./projetos/leitor_joystick) | Leitor de valores dos eixos do joystick com escrita no display|
 | [Leitor de temperatura interna](./projetos/leitor_temperatura_interna) | Leitor de valor de temperatura interna com escrita no display |
 | [Leitor de temperatura teste](./projetos/leitor_temperatura_teste) | Programa para teste de função de conversão de leitura ADC para Celsius |
-| [Leitor de temperatura interna](./projetos/pisca_led_w) | Pisca Led embutido da Pico W com programação modular |
+| [Pisca Led com programação modular](./projetos/pisca_led_w) | Pisca Led embutido da Pico W com programação modular |
+| [Galton Board](./projetos/galton_board) | Digital Twin do experimento Galton Board |
+| [IoT Security](./projetos/iot_security) | Programa para comunicação MQTT entre duas Pi Pico W |
+| [Sintetizador de Áudio](./projetos/sintetizador_audio) | Programa gravador e reprodutor de áudio |
 
 ## Licença
 
