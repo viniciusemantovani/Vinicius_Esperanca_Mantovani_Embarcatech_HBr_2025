@@ -29,6 +29,8 @@ Este repositório tem por objetivo armazenar e compartilhar os projetos desenvol
 | [Galton Board](./projetos/galton_board) | Digital Twin do experimento Galton Board |
 | [IoT Security](./projetos/iot_security) | Programa para comunicação MQTT entre duas Pi Pico W |
 | [Sintetizador de Áudio](./projetos/sintetizador_audio) | Programa gravador e reprodutor de áudio |
+| [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Programa com atividades periódicas usando sistema de tasks do FreeRTOS |
+
 
 ## Licença
 
