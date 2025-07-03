@@ -2,7 +2,7 @@
 
 Author: **Vinícius Esperança Mantovani**
 
-Course: Technologic Residence on Embedded Systems
+Course: Technical Residency on Embedded Systems
 
 Institution: EmbarcaTech - HBr
 
@@ -12,24 +12,24 @@ Campinas, 2025
 
 ## About this Repository
 
-This repo is used to save and share the projects developed by me during the Embedded Systems training, EMBARCATECH
+This repository contains the projects I developed during the EmbarcaTech Embedded Systems training program.
 
 ---
 
 ## 📂 Projects List
 
-| Projeto | Descrição |
+| Projects | Description |
 |---------|-----------|
 | [TLMGame](./projetos/TLMGame) | 1st Phase Project: Logical reasoning games |
-| [Contador Decrescente](./projetos/contador_decrescente) |  9 seconds countdown counter with simultaneous clicks counter for button B|
+| [Contador Decrescente](./projetos/contador_decrescente) |  A 9-seconds countdown timer with a counter for button B clicks |
 | [Leitor de Joystick](./projetos/leitor_joystick) | Joystick values reader with display |
 | [Leitor de temperatura interna](./projetos/leitor_temperatura_interna) | Internal temperature reader with display |
-| [Leitor de temperatura teste](./projetos/leitor_temperatura_teste) | Program to test function for adc conversion to Celsius |
-| [Pisca Led com programação modular](./projetos/pisca_led_w) | Led blink with modular programming |
-| [Galton Board](./projetos/galton_board) | Digital Twin of Galton Board experiment|
-| [IoT Security](./projetos/iot_security) | Program for MQTT communication between two RP Pi Pico boards |
-| [Sintetizador de Áudio](./projetos/sintetizador_audio) | Recorder and player of audio |
-| [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Periodic activities program using FreeRTOS |
+| [Leitor de temperatura teste](./projetos/leitor_temperatura_teste) | Program to test a function that converts adc read value to Celsius |
+| [Pisca Led com programação modular](./projetos/pisca_led_w) | A blinking Led program using modular programming |
+| [Galton Board](./projetos/galton_board) | A Digital Twin of Galton Board experiment |
+| [IoT Security](./projetos/iot_security) | Secure MQTT communication between two RP Pi Pico boards demonstration project |
+| [Sintetizador de Áudio](./projetos/sintetizador_audio) | An audio recorder and playback synthesizer |
+| [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Periodic activities program using FreeRTOS tasks system|
 
 
 ## License
