@@ -38,7 +38,7 @@ GPL-3.0
 
 ---
 
-# Projetos de Sistemas Embarcados - EmbarcaTech 2025
+# Projetos de Sistemas Embarcados - EmbarcaTech 2025 - português
 
 Autor: **Vinícius Esperança Mantovani**
 
