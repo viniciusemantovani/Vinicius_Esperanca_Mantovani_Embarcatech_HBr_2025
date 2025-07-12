@@ -38,6 +38,7 @@ pico_sdk_init()
 add_executable(robo_equilibrista 
         ${CMAKE_CURRENT_LIST_DIR}/app/main.c
         ${CMAKE_CURRENT_LIST_DIR}/driver/mpu6050_i2c.c
+        ${CMAKE_CURRENT_LIST_DIR}/driver/motor.c        
 )
 
 pico_set_program_name(robo_equilibrista "robo_equilibrista")
@@ -59,6 +60,7 @@ target_include_directories(robo_equilibrista PRIVATE
 # Add any user requested libraries
 target_link_libraries(robo_equilibrista 
         hardware_i2c
+        hardware_pwm
         
         )
 
