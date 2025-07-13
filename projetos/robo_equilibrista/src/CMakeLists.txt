@@ -61,7 +61,7 @@ target_include_directories(robo_equilibrista PRIVATE
 target_link_libraries(robo_equilibrista 
         hardware_i2c
         hardware_pwm
-        
+        hardware_timer
         )
 
 pico_add_extra_outputs(robo_equilibrista)
