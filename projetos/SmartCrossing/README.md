@@ -12,4 +12,4 @@ Passos para compilação e gravação com CMake:
 - No terminal, acesse a pasta "cd build";
 - Execute "cmake ..";
 - Execute "make";
-- Copie o ".ufd" para o diretório da Pi Pico.
+- Copie o ".uf2" para o diretório da Pi Pico.
