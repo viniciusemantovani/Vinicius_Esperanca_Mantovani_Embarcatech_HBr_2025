@@ -61,7 +61,7 @@ Este repositório tem por objetivo armazenar e compartilhar os projetos desenvol
 
 | Projeto | Descrição |
 |---------|-----------|
-| [TLMGame](./projetos/TLMGame) | Projeto da fase 1: Jogos de treinamento de raciocínio lógico |
+| [TLMGame](./projetos/TLMGame) | Projeto Final da Fase 1: Jogos de treinamento de raciocínio lógico |
 | [Contador Decrescente](./projetos/contador_decrescente) | Contador decrescente de 9 segundos com contagem simultânea de cliques de B|
 | [Leitor de Joystick](./projetos/leitor_joystick) | Leitor de valores dos eixos do joystick com escrita no display|
 | [Leitor de temperatura interna](./projetos/leitor_temperatura_interna) | Leitor de valor de temperatura interna com escrita no display |
@@ -71,9 +71,10 @@ Este repositório tem por objetivo armazenar e compartilhar os projetos desenvol
 | [IoT Security](./projetos/iot_security) | Programa para comunicação MQTT entre duas Pi Pico W |
 | [Sintetizador de Áudio](./projetos/sintetizador_audio) | Programa gravador e reprodutor de áudio |
 | [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Programa com atividades periódicas usando sistema de tasks do FreeRTOS |
-
+| [Smart Crossing](.projetos/SmartCrossing) | Projeto FInal da Fase 2: Semáforo inteligente com sensoriamento de presença e features de inclusão |
 
 ## Licença
 
 GPL-3.0
+
 
