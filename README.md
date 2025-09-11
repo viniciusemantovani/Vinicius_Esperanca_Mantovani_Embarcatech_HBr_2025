@@ -20,7 +20,7 @@ This repository contains the projects I developed during the EmbarcaTech Embedde
 
 | Projects | Description |
 |---------|-----------|
-| [TLMGame](./projetos/TLMGame) | 1st Phase Project: Logical reasoning games |
+| [TLMGame](./projetos/TLMGame) | 1st Phase Conclusion Project: Logical reasoning games |
 | [Contador Decrescente](./projetos/contador_decrescente) |  A 9-seconds countdown timer with a counter for button B clicks |
 | [Leitor de Joystick](./projetos/leitor_joystick) | Joystick values reader with display |
 | [Leitor de temperatura interna](./projetos/leitor_temperatura_interna) | Internal temperature reader with display |
@@ -29,7 +29,8 @@ This repository contains the projects I developed during the EmbarcaTech Embedde
 | [Galton Board](./projetos/galton_board) | A Digital Twin of Galton Board experiment |
 | [IoT Security](./projetos/iot_security) | Secure MQTT communication between two RP Pi Pico boards demonstration project |
 | [Sintetizador de Áudio](./projetos/sintetizador_audio) | An audio recorder and playback synthesizer |
-| [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Periodic activities program using FreeRTOS tasks system|
+| [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Periodic activities program using FreeRTOS tasks system |
+| [Smart Crossing](.projetos/SmartCrossing) | 2nd Phase Conclusion Project: Smart semaphore with presence sensing and inclusion features |
 
 
 ## License
@@ -75,3 +76,4 @@ Este repositório tem por objetivo armazenar e compartilhar os projetos desenvol
 ## Licença
 
 GPL-3.0
+
