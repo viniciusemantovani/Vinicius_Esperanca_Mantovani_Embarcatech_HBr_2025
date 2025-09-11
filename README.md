@@ -30,7 +30,7 @@ This repository contains the projects I developed during the EmbarcaTech Embedde
 | [IoT Security](./projetos/iot_security) | Secure MQTT communication between two RP Pi Pico boards demonstration project |
 | [Sintetizador de Áudio](./projetos/sintetizador_audio) | An audio recorder and playback synthesizer |
 | [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Periodic activities program using FreeRTOS tasks system |
-| [Smart Crossing](.projetos/SmartCrossing) | 2nd Phase Conclusion Project: Smart semaphore with presence sensing and inclusion features |
+| [Smart Crossing](./projetos/SmartCrossing) | 2nd Phase Conclusion Project: Smart semaphore with presence sensing and inclusion features |
 
 
 ## License
@@ -71,10 +71,11 @@ Este repositório tem por objetivo armazenar e compartilhar os projetos desenvol
 | [IoT Security](./projetos/iot_security) | Programa para comunicação MQTT entre duas Pi Pico W |
 | [Sintetizador de Áudio](./projetos/sintetizador_audio) | Programa gravador e reprodutor de áudio |
 | [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Programa com atividades periódicas usando sistema de tasks do FreeRTOS |
-| [Smart Crossing](.projetos/SmartCrossing) | Projeto FInal da Fase 2: Semáforo inteligente com sensoriamento de presença e features de inclusão |
+| [Smart Crossing](./projetos/SmartCrossing) | Projeto FInal da Fase 2: Semáforo inteligente com sensoriamento de presença e features de inclusão |
 
 ## Licença
 
 GPL-3.0
+
 
 
