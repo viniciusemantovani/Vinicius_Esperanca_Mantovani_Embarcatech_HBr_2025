@@ -5,6 +5,8 @@
 #include "task.h"
 #include "semphr.h"
 
+#define MAX_DIST_PEDESTER_DETECTION 100
+
 void sensor_task(void *params);
 
 #endif

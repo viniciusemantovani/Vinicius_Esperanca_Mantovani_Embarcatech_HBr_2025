@@ -11,12 +11,15 @@
 #define START "start"
 #define ACK "ack"
 #define PERSON_DETECTED "pd"
+#define TIME_CHANGE_BLE "time:"
 
 #define UDP_PORT 4444
 #define AP_IP "192.168.4.1"
 
+extern bool time_changed_ble;
 extern SemaphoreHandle_t sync_sensor;
 extern SemaphoreHandle_t sync_light;
+extern SemaphoreHandle_t sync_ble;
 extern struct udp_pcb *udppcb;
 
 void udp_init_recv(struct udp_pcb **pcb);

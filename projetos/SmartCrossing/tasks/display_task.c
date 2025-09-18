@@ -34,11 +34,11 @@ void draw_empty_square_in_display(uint32_t x, uint32_t y, uint32_t width, uint32
     xTaskNotifyGive(handle_display_task);
 }
 
-void time_in_display()
-{
-    time = get_absolute_time();
-    time_count_on = 0;
-}
+// void time_in_display()
+// {
+//     time = get_absolute_time();
+//     time_count_on = 0;
+// }
 
 void time_stop(){
     time_count_on = 0;

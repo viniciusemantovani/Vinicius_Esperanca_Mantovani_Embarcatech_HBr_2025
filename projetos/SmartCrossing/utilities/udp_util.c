@@ -3,10 +3,13 @@
 #include <string.h>
 #include "udp_util.h"
 #include "task_handles.h"
+#include "traffic_light_control.h"
 
 struct udp_pcb *udppcb = NULL;
 SemaphoreHandle_t sync_sensor;
 SemaphoreHandle_t sync_light;
+SemaphoreHandle_t sync_ble;
+bool time_changed_ble = 0;
 
 ip4_addr_t ip_other_pico;
 bool ip_other_pico_is_set = false;
@@ -53,6 +56,7 @@ void udp_recv_function(void *arg, struct udp_pcb *pcb, struct pbuf *p, const ip_
         {
             xSemaphoreGive(sync_light);
             xSemaphoreGive(sync_sensor);
+            xSemaphoreGive(sync_ble);
             udp_send_message(udppcb, ACK);
         }
         else if(!strcmp(buffer, ACK))
@@ -62,6 +66,14 @@ void udp_recv_function(void *arg, struct udp_pcb *pcb, struct pbuf *p, const ip_
         else if(!strcmp(buffer, PERSON_DETECTED))
         {
             xTaskNotifyGive(handle_tl_task);
+        }
+        else if(!strncmp(buffer, TIME_CHANGE_BLE, 5))
+        {
+            uint16_t time_recv;
+            char *end_pointer;
+            time_recv = strtol(&buffer[5], &end_pointer, 10);
+            printf("%s\ntime_recv = %d", buffer, time_recv);
+            set_time_green(PEOPLE, time_recv);
         }
 
         pbuf_free(p);

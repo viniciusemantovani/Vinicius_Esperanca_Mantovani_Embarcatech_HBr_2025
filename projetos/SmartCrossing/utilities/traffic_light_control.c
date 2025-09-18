@@ -8,48 +8,28 @@ uint16_t time_green_car = TIME_GREEN_CAR_DEFAULT - (TIME_TO_CLOSE_CAR_MIN + TIME
 uint16_t time_to_turn_green_people = TIME_TO_TURN_GREEN_PEOPLE_DEFAULT;
 uint16_t time_to_turn_green_car = TIME_TO_TURN_GREEN_CAR_DEFAULT;
 
-void led_green_on(uint8_t people_or_car)
+void led_green_on()
 {
     
-    if(people_or_car == PEOPLE)
-    {
-        np_set_led(PEOPLE_RED_LED_NUM, 0, 0, 0);
-        np_set_led(PEOPLE_GREEN_LED_NUM, 0, 200, 0);
-    } 
-    else if(people_or_car == CAR)
-    {
-        np_set_led(CAR_RED_LED_NUM, 0, 0, 0);
-        np_set_led(CAR_GREEN_LED_NUM, 0, 200, 0);
-    }
+    np_set_led(RED_LED_NUM, 0, 0, 0);
+    np_set_led(GREEN_LED_NUM, 0, 200, 0);
+
 }
 
-void led_red_on(uint8_t people_or_car)
+void led_red_on()
 {
     
-    if(people_or_car == PEOPLE)
-    {
-        np_set_led(PEOPLE_YELLOW_LED_NUM, 0, 0, 0);
-        np_set_led(PEOPLE_RED_LED_NUM, 200, 0, 0);
-    } 
-    else if(people_or_car == CAR)
-    {
-        np_set_led(CAR_YELLOW_LED_NUM, 0, 0, 0);
-        np_set_led(CAR_RED_LED_NUM, 200, 0, 0);
-    }
+    np_set_led(YELLOW_LED_NUM, 0, 0, 0);
+    np_set_led(RED_LED_NUM, 200, 0, 0);
+
 }
 
-void led_yellow_on(uint8_t people_or_car)
+void led_yellow_on()
 {
-    if(people_or_car == PEOPLE)
-    {
-        np_set_led(PEOPLE_GREEN_LED_NUM, 0, 0, 0);
-        np_set_led(PEOPLE_YELLOW_LED_NUM, 200, 200, 0);
-    } 
-    else if(people_or_car == CAR)
-    {
-        np_set_led(CAR_GREEN_LED_NUM, 0, 0, 0);
-        np_set_led(CAR_YELLOW_LED_NUM, 200, 200, 0);
-    }
+
+    np_set_led(GREEN_LED_NUM, 0, 0, 0);
+    np_set_led(YELLOW_LED_NUM, 200, 200, 0);
+
 }
 
 uint16_t get_time_green(uint8_t people_or_car)

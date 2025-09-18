@@ -25,7 +25,7 @@ SET(FREERTOS_PATH ${CMAKE_CURRENT_LIST_DIR}/FreeRTOS-Kernel)
 message("FreeRTOS Kernel located in ${FREERTOS_PATH}")
 
 # Import those libraries
-include(pico_sdk_import.cmake)
+include($ENV{PICO_SDK_PATH}/pico_sdk_init.cmake)
 include(${FREERTOS_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
 
 # Define project
@@ -40,6 +40,7 @@ add_executable(${ProjectName}
    utilities/ssd1306.c
    utilities/dhcp_server.c
    utilities/udp_util.c
+   utilities/ble_connection.c
    utilities/traffic_light_control.c
    utilities/cpp_vl53l0x/VL53L0X.cpp
    utilities/cpp_vl53l0x/vl53l0x_wrapper.cpp
@@ -48,6 +49,7 @@ add_executable(${ProjectName}
    tasks/display_task.c
    tasks/ap_task.c
    tasks/sta_task.c
+   tasks/ble_task.c
 )
  
 pico_generate_pio_header(smart_light ${CMAKE_CURRENT_LIST_DIR}/utilities/include/ws2812b.pio)
@@ -70,6 +72,11 @@ target_include_directories(${ProjectName} PRIVATE
 pico_set_program_name(${ProjectName} "smart_light")
 pico_set_program_version(${ProjectName} "0.1")
 
+target_compile_definitions(${ProjectName} PRIVATE
+    PICO_BOARD=\"pico_w\"
+    CYW43_ENABLE_BLUETOOTH=1
+)
+
 target_link_libraries(${ProjectName}
    pico_stdlib
    hardware_gpio
@@ -83,6 +90,8 @@ target_link_libraries(${ProjectName}
    hardware_i2c
    hardware_pio
    hardware_clocks
+   pico_btstack_cyw43
+   pico_btstack_ble
    pico_cyw43_arch_lwip_threadsafe_background
 )
 

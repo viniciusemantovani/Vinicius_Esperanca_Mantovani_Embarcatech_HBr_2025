@@ -9,5 +9,6 @@ extern TaskHandle_t handle_sensor_task;
 extern TaskHandle_t handle_display_task;
 extern TaskHandle_t handle_ap_task;
 extern TaskHandle_t handle_sta_task;
+extern TaskHandle_t handle_ble_task;
 
 #endif

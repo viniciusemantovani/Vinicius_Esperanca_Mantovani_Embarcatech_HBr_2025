@@ -18,12 +18,11 @@ const char WIFI_PASSWORD[] = "Smart_Crossing";
 
 void sta_task(void *params)
 {
-    sync_sensor = xSemaphoreCreateCounting(2, 0);
-    sync_light = xSemaphoreCreateCounting(2, 0);
-
-    vTaskDelay(pdMS_TO_TICKS(3000));
+    sync_sensor = xSemaphoreCreateBinary();
+    sync_light = xSemaphoreCreateBinary();
+    sync_ble = xSemaphoreCreateBinary();
     
-    if (cyw43_arch_init()) {
+    if (cyw43_arch_init_with_country(CYW43_COUNTRY_BRAZIL)) {
         printf("Wi-Fi init failed\n");
     }
     else
@@ -45,9 +44,19 @@ void sta_task(void *params)
     udp_send_message(udppcb, START);
     xSemaphoreGive(sync_light);
     xSemaphoreGive(sync_sensor);
+    xSemaphoreGive(sync_ble);
 
     while(true)
     {
+        if(time_changed_ble == 1)
+        {
+            char time_send_str[12];
+            sprintf(time_send_str, "time:%d\0", get_time_green(PEOPLE));
+            udp_send_message(udppcb, time_send_str);
+            printf("%s\n", time_send_str);
+            time_changed_ble = 0;
+        }
+
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 }

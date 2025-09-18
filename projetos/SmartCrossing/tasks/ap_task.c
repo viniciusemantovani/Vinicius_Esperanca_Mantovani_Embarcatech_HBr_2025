@@ -19,12 +19,11 @@ const char *AP_PASS = "Smart_Crossing";
 
 void ap_task(void *params)
 {
-    sync_sensor = xSemaphoreCreateCounting(2, 0);
-    sync_light = xSemaphoreCreateCounting(2, 0);
+    sync_sensor = xSemaphoreCreateBinary();
+    sync_light = xSemaphoreCreateBinary();
+    sync_ble = xSemaphoreCreateBinary();
     
-    vTaskDelay(pdMS_TO_TICKS(3000));
-
-    if (cyw43_arch_init()) {
+    if (cyw43_arch_init_with_country(CYW43_COUNTRY_BRAZIL)) {
         printf("Failed to initialise cyw43\n");
     }
 
@@ -43,6 +42,15 @@ void ap_task(void *params)
 
     while(1)
     {
+        if(time_changed_ble == 1)
+        {
+            char time_send_str[12];
+            sprintf(time_send_str, "time:%d\0", get_time_green(PEOPLE));
+            udp_send_message(udppcb, time_send_str);
+            printf("%s\n", time_send_str);
+            time_changed_ble = 0;
+        }
+
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 }

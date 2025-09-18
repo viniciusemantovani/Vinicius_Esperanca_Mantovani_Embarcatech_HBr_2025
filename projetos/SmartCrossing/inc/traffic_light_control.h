@@ -1,13 +1,9 @@
 #ifndef LED_STATE_H
 #define LED_STATE_H
 
-#define PEOPLE_GREEN_LED_NUM                10
-#define PEOPLE_YELLOW_LED_NUM               9
-#define PEOPLE_RED_LED_NUM                  0
-
-#define CAR_GREEN_LED_NUM                   14
-#define CAR_YELLOW_LED_NUM                  5
-#define CAR_RED_LED_NUM                     4
+#define GREEN_LED_NUM                   12
+#define YELLOW_LED_NUM                  7
+#define RED_LED_NUM                     2
 
 #define TIME_GREEN_PEOPLE_DEFAULT           10000
 #define TIME_GREEN_CAR_DEFAULT              10000
@@ -42,11 +38,11 @@ enum Entity
     CAR
 };
 
-void led_green_on(uint8_t people_or_car);
+void led_green_on();
 
-void led_red_on(uint8_t people_or_car);
+void led_red_on();
 
-void led_yellow_on(uint8_t people_or_car);
+void led_yellow_on();
 
 void set_time_green(uint8_t people_or_car, uint16_t new_time);
 

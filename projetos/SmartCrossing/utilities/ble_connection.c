@@ -7,6 +7,19 @@
 #include "pico/stdlib.h"         // Biblioteca principal do SDK do Raspberry Pi Pico.
 #include "pico/cyw43_arch.h"     // Biblioteca para controle do chip wireless (CYW43439) da Pico W.
 #include "btstack.h"             // Biblioteca principal da pilha de software Bluetooth (BTstack).
+#include "traffic_light_control.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "udp_util.h"
+
+// ====================================================================================
+// DEFINIÇÕES DE HARDWARE (LEDs)
+// ====================================================================================
+
+#define LED_PIN   CYW43_WL_GPIO_LED_PIN // Apelido para o pino do LED embutido na placa Pico W.
+#define GREEN_LED 11                  // O LED verde externo está conectado ao pino GPIO 11.
+#define BLUE_LED  12                  // O LED azul externo está conectado ao pino GPIO 12.
+#define RED_LED   13                  // O LED vermelho externo está conectado ao pino GPIO 13.
 
 // ====================================================================================
 // CONFIGURAÇÃO DOS PACOTES DE ANÚNCIO (ADVERTISING) BLUETOOTH
@@ -162,7 +175,11 @@ static int att_write_callback(hci_con_handle_t connection_handle, uint16_t attri
     
     mobility_level = value; // Atualiza a variável global com o novo valor validado.
     printf("[GATT] Mobility level = %u (tempo=%us)\n", mobility_level, mobility_level * 5);
-    start_led_blink_green(mobility_level); // Inicia o feedback visual no LED verde.
+    // start_led_blink_green(mobility_level); // Inicia o feedback visual no LED verde.
+    uint16_t time_send = TIME_GREEN_PEOPLE_DEFAULT + (mobility_level * 5000);
+    set_time_green(PEOPLE, time_send);
+    printf("Time set to: %d\n", time_send);
+    time_changed_ble = 1;
     return ATT_ERROR_SUCCESS; // Retorna sucesso.
 }
 
@@ -237,55 +254,54 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
     }
 }
 
-// ====================================================================================
-// FUNÇÃO PRINCIPAL (MAIN)
-// ====================================================================================
-int main(){
-    // Inicializa a comunicação serial via USB para usar o printf().
-    stdio_init_all();
-    printf("\n=== Pico W BLE Mobility Service (Advertising rápido fixo, LED onboard sempre ON) ===\n");
-
-    // Inicializa o chip wireless CYW43439, configurando para o Brasil.
-    if (cyw43_arch_init_with_country(CYW43_COUNTRY_BRAZIL)){
-        printf("Failed to init cyw43_arch\n");
-        return -1;
-    }
+void init_ble_process(){
 
     // Inicializa os pinos dos LEDs externos como saídas em nível baixo.
     gpio_init_output_low(GREEN_LED);
     gpio_init_output_low(BLUE_LED);
     gpio_init_output_low(RED_LED);
 
+    vTaskDelay(pdMS_TO_TICKS(10));
+
     // Associa cada timer com sua respectiva função de callback (handler).
     btstack_run_loop_set_timer_handler(&led_timer_green, led_timer_handler_green);
     btstack_run_loop_set_timer_handler(&led_timer_blue,  led_timer_handler_blue);
     btstack_run_loop_set_timer_handler(&led_timer_red,   led_timer_handler_red);
 
+    vTaskDelay(pdMS_TO_TICKS(10));
+
     // Inicializa as camadas da pilha Bluetooth.
     l2cap_init(); // Protocolo de multiplexação e adaptação da camada lógica.
+
+    vTaskDelay(pdMS_TO_TICKS(10));
+
     sm_init();    // Gerenciador de Segurança (para pareamento).
-    
+
+    vTaskDelay(pdMS_TO_TICKS(10));
+
     // Monta a nossa estrutura de serviços e características.
     create_gatt_database();
-    
+
+    vTaskDelay(pdMS_TO_TICKS(10));
+
     // Inicializa o servidor ATT (Protocolo de Atributos) e registra nossos callbacks de leitura/escrita.
     att_server_init(att_db_util_get_address(), att_read_callback, att_write_callback);
+
+    vTaskDelay(pdMS_TO_TICKS(10));
 
     // Registra nossa função packet_handler para receber todos os eventos da camada HCI (Host Controller Interface).
     hci_event_callback_registration.callback = &packet_handler;
     hci_add_event_handler(&hci_event_callback_registration);
 
+    vTaskDelay(pdMS_TO_TICKS(10));
+
     // Liga o rádio Bluetooth.
     hci_power_control(HCI_POWER_ON);
     printf("Bluetooth initializing...\n");
 
+    vTaskDelay(pdMS_TO_TICKS(10));
+
     // Inicia o loop principal de eventos do BTstack. O programa fica "preso" nesta linha para sempre,
     // processando eventos de Bluetooth e de timers de forma assíncrona.
     btstack_run_loop_execute();
-    
-    // As linhas abaixo, em teoria, nunca são alcançadas em um sistema embarcado que roda para sempre.
-    // ★★★ ALTERAÇÃO AQUI: Corrigido de "cyw4fs" para "cyw43" ★★★
-    cyw43_arch_deinit(); // Desliga o chip wireless.
-    
-    return 0;
 }
