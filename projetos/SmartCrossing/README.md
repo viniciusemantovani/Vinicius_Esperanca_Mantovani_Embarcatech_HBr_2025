@@ -32,8 +32,7 @@ Passos para compilação e gravação com CMake:
 
 ## 🖼️ Imagens do Projeto
 
-### Ainda não disponíveis
-Projeto em curso, próximo da finalização
+### Ainda não adicionadas
 
 ---
 
