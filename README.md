@@ -1,4 +1,4 @@
-# Embedded Systems Projects - EmbarcaTech 2025 - english
+# Embedded Systems Projects - EmbarcaTech 2025 - English
 
 Author: **Vinícius Esperança Mantovani**
 
@@ -20,17 +20,17 @@ This repository contains the projects I developed during the EmbarcaTech Embedde
 
 | Projects | Description |
 |---------|-----------|
-| [TLMGame](./projetos/TLMGame) | 1st Phase Conclusion Project: Logical reasoning games |
-| [Contador Decrescente](./projetos/contador_decrescente) |  A 9-seconds countdown timer with a counter for button B clicks |
-| [Leitor de Joystick](./projetos/leitor_joystick) | Joystick values reader with display |
-| [Leitor de temperatura interna](./projetos/leitor_temperatura_interna) | Internal temperature reader with display |
-| [Leitor de temperatura teste](./projetos/leitor_temperatura_teste) | Program to test a function that converts adc read value to Celsius |
-| [Pisca Led com programação modular](./projetos/pisca_led_w) | A blinking Led program using modular programming |
-| [Galton Board](./projetos/galton_board) | A Digital Twin of Galton Board experiment |
-| [IoT Security](./projetos/iot_security) | Secure MQTT communication between two RP Pi Pico boards demonstration project |
-| [Sintetizador de Áudio](./projetos/sintetizador_audio) | An audio recorder and playback synthesizer |
-| [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Periodic activities program using FreeRTOS tasks system |
-| [Smart Crossing](./projetos/SmartCrossing) | 2nd Phase Conclusion Project: Smart semaphore with presence sensing and inclusion features |
+| [TLMGame](./Projects/TLMGame) | 1st Phase Conclusion Project: Logical reasoning games |
+| [Contador Decrescente](./Projects/countdown_timer) |  A 9-seconds countdown timer with a counter for button B clicks |
+| [Leitor de Joystick](./Projects/joystick_reader) | Joystick values reader with display |
+| [Leitor de temperatura interna](./Projects/internal_temperature_reader) | Internal temperature reader with display |
+| [Leitor de temperatura teste](./Projects/temperature_reader_test) | Program to test a function that converts adc read value to Celsius |
+| [Pisca Led com programação modular](./Projects/blink_led_pico_w) | A blinking Led program using modular programming |
+| [Galton Board](./Projects/galton_board) | A Digital Twin of Galton Board experiment |
+| [IoT Security](./Projects/iot_security) | Secure MQTT communication between two RP Pi Pico boards demonstration project |
+| [Sintetizador de Áudio](./Projects/audio_synthesizer) | An audio recorder and playback synthesizer |
+| [FreeRTOS Análise de Tasks](./Projects/freertos_tasks_analysis) | Periodic activities program using FreeRTOS tasks system |
+| [Smart Crossing](./Projects/SmartCrossing) | 2nd Phase Conclusion Project: Smart semaphore with presence sensing and inclusion features |
 
 
 ## License
@@ -39,7 +39,7 @@ GPL-3.0
 
 ---
 
-# Projetos de Sistemas Embarcados - EmbarcaTech 2025 - português
+# Projetos de Sistemas Embarcados - EmbarcaTech 2025 - Português
 
 Autor: **Vinícius Esperança Mantovani**
 
@@ -61,17 +61,17 @@ Este repositório tem por objetivo armazenar e compartilhar os projetos desenvol
 
 | Projeto | Descrição |
 |---------|-----------|
-| [TLMGame](./projetos/TLMGame) | Projeto Final da Fase 1: Jogos de treinamento de raciocínio lógico |
-| [Contador Decrescente](./projetos/contador_decrescente) | Contador decrescente de 9 segundos com contagem simultânea de cliques de B|
-| [Leitor de Joystick](./projetos/leitor_joystick) | Leitor de valores dos eixos do joystick com escrita no display|
-| [Leitor de temperatura interna](./projetos/leitor_temperatura_interna) | Leitor de valor de temperatura interna com escrita no display |
-| [Leitor de temperatura teste](./projetos/leitor_temperatura_teste) | Programa para teste de função de conversão de leitura ADC para Celsius |
-| [Pisca Led com programação modular](./projetos/pisca_led_w) | Pisca Led embutido da Pico W com programação modular |
-| [Galton Board](./projetos/galton_board) | Digital Twin do experimento Galton Board |
-| [IoT Security](./projetos/iot_security) | Programa para comunicação MQTT entre duas Pi Pico W |
-| [Sintetizador de Áudio](./projetos/sintetizador_audio) | Programa gravador e reprodutor de áudio |
-| [FreeRTOS Análise de Tasks](./projetos/freertos_tasks_analysis) | Programa com atividades periódicas usando sistema de tasks do FreeRTOS |
-| [Smart Crossing](./projetos/SmartCrossing) | Projeto FInal da Fase 2: Semáforo inteligente com sensoriamento de presença e features de inclusão |
+| [TLMGame](./Projects/TLMGame) | Projeto Final da Fase 1: Jogos de treinamento de raciocínio lógico |
+| [Contador Decrescente](./Projects/countdown_timer) | Contador decrescente de 9 segundos com contagem simultânea de cliques de B|
+| [Leitor de Joystick](./Projects/joystick_reader) | Leitor de valores dos eixos do joystick com escrita no display|
+| [Leitor de temperatura interna](./Projects/internal_temperature_reader) | Leitor de valor de temperatura interna com escrita no display |
+| [Leitor de temperatura teste](./Projects/temperature_reader_test) | Programa para teste de função de conversão de leitura ADC para Celsius |
+| [Pisca Led com programação modular](./Projects/blink_led_pico_w) | Pisca Led embutido da Pico W com programação modular |
+| [Galton Board](./Projects/galton_board) | Digital Twin do experimento Galton Board |
+| [IoT Security](./Projects/iot_security) | Programa para comunicação MQTT entre duas Pi Pico W |
+| [Sintetizador de Áudio](./Projects/audio_synthesizer) | Programa gravador e reprodutor de áudio |
+| [FreeRTOS Análise de Tasks](./Projects/freertos_tasks_analysis) | Programa com atividades periódicas usando sistema de tasks do FreeRTOS |
+| [Smart Crossing](./Projects/SmartCrossing) | Projeto FInal da Fase 2: Semáforo inteligente com sensoriamento de presença e features de inclusão |
 
 ## Licença
 
